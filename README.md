@@ -5,9 +5,7 @@ The output is an `.avi` video encoded with `MJPG`. The video codec can be change
 
 At this time this script **only** runs on Unix / Linux systems (tested on Ubuntu 16.04, 04/19/2018).
 
-<center>
 ![Example](gif/example.gif)
-</center>
 
 ## Dependencies
 * [Python](https://www.python.org/) (version 3.5)
@@ -40,11 +38,13 @@ For more information check www.github.com/ckreisl
 
 The first four parameters **-i, -o, -a, -s** are required to run the script.
 
-Converting the frames into artworks is running in multiple threads. The amount of used threads can be modified with the **-p** argument. In Addition you can set the frame rate [FPS] of your generated output video with **-f**. At least you can set which frames should be converted into artworks. This is possible with the **-n** parameter. This gives a flickering effect between original video frame and the converted frame.
+Converting the frames into artworks is running within multiple threads. The amount of used threads can be modified with the **-p** argument. In Addition you can set the frame rate [FPS] of your generated output video with **-f**. At least you can set which frames should be converted into artworks. This is possible with the **-n** parameter. This gives a flickering effect between original video frame and the converted frame.
 ### Windows
 (maybe coming soon)
 ### MacOS
 (maybe coming soon)
 
 ## Status
+If you have any questions, feel free to ask.
+
 Copyright (c) Christoph Kreisl
