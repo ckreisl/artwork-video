@@ -8,13 +8,13 @@ At this time this script **only** runs on Unix / Linux systems (tested on Ubuntu
 ![Example](gif/example.gif)
 
 ## Dependencies
-* [Python](https://www.python.org/) (version 3.5)
+* [Python](https://www.python.org/) (version 2.7 or 3.5)
 * [OpenCV](https://opencv.org/) (version 3.4.0)
 
 ## Usage
 As said above, at this time this script is only implemented for Unix / Linux systems. If you like to extend this script for other operating systems just send me a pull request.
 ### Linux
-The script runs via command line. With `python3.5 artworkvideo.py -h` you get the following help message.
+The script runs via command line. With `python artworkvideo.py -h` you get the following help message.
 
 ```
 artworkvideo.py [-h] -i [video] -o [name] -a [artwork] -s [xml]
