@@ -1,17 +1,38 @@
 import cv2 as cv
 import time
 import os
+import sys
+import signal
 import argparse
 import threading
 import readline
-# was renamed in python 3 (python 2 Queue)
-import queue
-
 from subprocess import call
-from queue import Queue
-from sys import platform
+# was renamed in python 3 (python 2 Queue)
+if sys.version_info[0] < 3:
+    import Queue as queue
+    from Queue import Queue
+else:
+    import queue
+    from queue import Queue
+
 
 commands = ["ArtWork", "artwork", "Artwork", "artWork", ".mp4", ".avi", ".mov", ".xml"]
+
+
+def ArtWorkScriptError(error):
+    """
+    Dummy error printer
+    :param error:
+    :return:
+    """
+    print(error)
+    exit(0)
+
+
+def signal_handler(signum, frame):
+    if os.path.exists("frames"):
+        call(["rm", "-Rf", "frames"])
+    sys.exit()
 
 
 def completer(text, state):
@@ -33,6 +54,9 @@ def process_frame_queue(path_to_artwork, path_to_xml):
 
 
 if __name__ == '__main__':
+
+    # add signal handler if user exits the script with CTRL+C
+    signal.signal(signal.SIGINT, signal_handler)
 
     # add autocomplete to command line arguments
     readline.set_completer(completer)
@@ -84,14 +108,12 @@ if __name__ == '__main__':
 
     # check used OpenCV version
     if int(first) < 3:
-        print("OpenCV v." + str(cv.__version__) + " < 3 not supported by this script")
-        exit(0)
+        ArtWorkScriptError("OpenCV v." + str(cv.__version__) + " < 3 not supported by this script")
 
     # check if we are on unix linux system
-    if not platform == "linux" and not platform == "linux2":
-        print("This script is currently only running with Unix Linux. \n"
+    if not sys.platform == "linux" and not sys.platform == "linux2":
+        ArtWorkScriptError("This script is currently only running with Unix Linux. \n"
               "If you like to change this, let me know or send me a pull request.")
-        exit(0)
 
     # parse command line arguments
     NUM_THREADS = args["p"]
@@ -106,9 +128,24 @@ if __name__ == '__main__':
     if "/" not in pathToArtWork:
         pathToArtWork = "./" + pathToArtWork
 
+    # check given path to ArtWork executable
+    if not os.path.isfile(pathToArtWork):
+        ArtWorkScriptError("ArtWork executable could not be found in: " + pathToArtWork + " path.")
+
+    # check if video input file exists
+    if not os.path.isfile(pathToVideo):
+        ArtWorkScriptError("Video file could not be found in: " + pathToVideo + " path.")
+
+    # check if XML file exists
+    if not os.path.isfile(pathToXML):
+        ArtWorkScriptError("XML file could not be found in: " + pathToXML + " path.")
+
     # process image and convert frames
     videoIn = cv.VideoCapture(pathToVideo)
     success, image = videoIn.read()
+
+    if not success:
+        ArtWorkScriptError("Could not load frame from video")
 
     # set output fps to input fps
     if FPS_VIDEO is None:
